@@ -33,6 +33,18 @@ public class ListaEstudiante {
         }
         return null; 
     }
+    
+    // Búsqueda Lineal por nombre
+    public NodoEstudiante buscarPorNombre(String nombre) {
+        NodoEstudiante p = inicio;
+        while (p != null) {
+            if (p.getNombre().equalsIgnoreCase(nombre.trim())) {
+                return p;
+            }
+            p = p.getSgte();
+        }
+        return null;
+    }
 
     public ArrayList<NodoEstudiante> getTodosComoArrayList() {
         ArrayList<NodoEstudiante> lista = new ArrayList<>();

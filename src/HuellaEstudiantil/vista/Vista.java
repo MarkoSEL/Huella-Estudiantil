@@ -3,6 +3,7 @@ package HuellaEstudiantil.vista;
 import HuellaEstudiantil.controlador.Controlador;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 public class Vista {
@@ -69,7 +70,7 @@ public class Vista {
                     case 8: gestionarProcesarParticipaciones(); break;
                     case 9: gestionarAjusteManual(); break;
                     case 10: gestionarMatricula(); break;
-                    
+
                     case 0:
                         JOptionPane.showMessageDialog(null, "Saliendo del sistema...");
                         break;
@@ -91,37 +92,83 @@ public class Vista {
         JOptionPane.showMessageDialog(null, resultado);
     }
     
-    // --- MÉTODO FALTANTE RESTAURADO ---
-    private void gestionarGenerarSesiones() { // Antes 2, ahora 6
-        String idSec = JOptionPane.showInputDialog("Ingrese el ID de la sección (ej. SI-123):");
+    private void gestionarGenerarSesiones() {
+        String idSec = JOptionPane.showInputDialog("Ingrese el ID de la sección:");
         if (idSec == null || idSec.trim().isEmpty()) return;
         
-        String diaSemanaInput = JOptionPane.showInputDialog("Ingrese el día (ej. LUNES):");
-        if (diaSemanaInput == null || diaSemanaInput.trim().isEmpty()) return;
-        
-        DayOfWeek dia = traducirDia(diaSemanaInput);
-        if (dia == null) {
-            JOptionPane.showMessageDialog(null, "Error: Día no válido.");
+        // Solicitar fecha de inicio
+        String fechaInput = JOptionPane.showInputDialog("Ingrese la fecha de inicio (ej. 10/03/2025):");
+        if (fechaInput == null || fechaInput.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Error: No se ingresó la fecha de inicio.");
             return;
         }
         
-        LocalDate fechaInicio = LocalDate.of(2025, 3, 10);
-        String resultado = controlador.generarSesiones(idSec, fechaInicio, dia);
+        LocalDate fechaInicio;
+        try {
+            String[] partes = fechaInput.trim().split("/");
+            int dia = Integer.parseInt(partes[0]);
+            int mes = Integer.parseInt(partes[1]);
+            int anio = Integer.parseInt(partes[2]);
+            fechaInicio = LocalDate.of(anio, mes, dia);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error: Formato de fecha inválido. Use dd/MM/yyyy");
+            return;
+        }
         
-        // --- CÓDIGO FALTANTE PARA MOSTRAR EN JTEXTAREA ---
+        // Solicitar días de la semana (puede ser uno o varios)
+        String diasInput = JOptionPane.showInputDialog("Ingrese los días de la semana separados por comas (ej. LUNES,MARTES o LUNES):");
+        if (diasInput == null || diasInput.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Error: No se ingresaron los días de la semana.");
+            return;
+        }
+        
+        String[] diasArray = diasInput.toUpperCase().split(",");
+        ArrayList<DayOfWeek> diasList = new ArrayList<>();
+        
+        for (String diaStr : diasArray) {
+            DayOfWeek dia = traducirDia(diaStr.trim());
+            if (dia == null) {
+                JOptionPane.showMessageDialog(null, "Error: Día no válido: " + diaStr);
+                return;
+            }
+            diasList.add(dia);
+        }
+        
+        if (diasList.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Error: Debe ingresar al menos un día válido.");
+            return;
+        }
+        
+        DayOfWeek[] dias = diasList.toArray(new DayOfWeek[0]);
+        String resultado = controlador.generarSesiones(idSec, fechaInicio, dias);
+        
+        // Mostrar en JTextArea
         javax.swing.JTextArea textArea = new javax.swing.JTextArea(resultado);
         textArea.setEditable(false);
         javax.swing.JScrollPane scrollPane = new javax.swing.JScrollPane(textArea);
         textArea.setLineWrap(true);
         textArea.setWrapStyleWord(true);
-        scrollPane.setPreferredSize(new java.awt.Dimension(400, 300));
+        scrollPane.setPreferredSize(new java.awt.Dimension(500, 400));
         JOptionPane.showMessageDialog(null, scrollPane, "Generación de Sesiones", JOptionPane.INFORMATION_MESSAGE);
     }
     
-    private void gestionarRegistroParticipacion() { // Antes 3, ahora 8
+    private void gestionarRegistroParticipacion() {
+        String idSeccion = JOptionPane.showInputDialog("Ingrese el ID de la sección:");
+        if (idSeccion == null || idSeccion.trim().isEmpty()) return;
+        
+        String idEvaluacion = JOptionPane.showInputDialog("Ingrese el ID de la evaluación (ej. PC1):");
+        if (idEvaluacion == null || idEvaluacion.trim().isEmpty()) return;
+        
+        String semana = JOptionPane.showInputDialog("Ingrese la Semana (ej. Semana 5):");
+        if (semana == null || semana.trim().isEmpty()) return;
+        
+        String sesion = JOptionPane.showInputDialog("Ingrese la Sesión (ej. Lunes 15/09):");
+        if (sesion == null || sesion.trim().isEmpty()) return;
+        
         String codigoEst = JOptionPane.showInputDialog("Ingrese el código del estudiante:");
         if (codigoEst == null || codigoEst.trim().isEmpty()) return;
-        String resultado = controlador.registrarParticipacion(codigoEst);
+        
+        String resultado = controlador.registrarParticipacion(idSeccion, idEvaluacion, semana, sesion, codigoEst);
         JOptionPane.showMessageDialog(null, resultado);
     }
     
@@ -147,28 +194,37 @@ public class Vista {
     // --- NUEVOS MÉTODOS DE GESTIÓN ---
 
     private void gestionarRegistrarEstudiante() {
-        String codigo = JOptionPane.showInputDialog("Ingrese Código (ej. U2024006):");
-        if (codigo == null || codigo.trim().isEmpty()) return;
         String nombre = JOptionPane.showInputDialog("Ingrese Nombre Completo:");
-        if (nombre == null || nombre.trim().isEmpty()) return;
+        if (nombre == null || nombre.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Error: El campo Nombre está vacío.");
+            return;
+        }
         
         String carreraInput = JOptionPane.showInputDialog("Ingrese Carrera (1: Sistemas, 2: Software, 3: Otro):");
-        if (carreraInput == null) return;
+        if (carreraInput == null || carreraInput.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Error: El campo Carrera está vacío.");
+            return;
+        }
         String carrera = "Otro";
         if (carreraInput.equals("1")) carrera = "Sistemas";
         if (carreraInput.equals("2")) carrera = "Software";
         
         try {
-            int ciclo = Integer.parseInt(JOptionPane.showInputDialog("Ingrese Ciclo (1-12):"));
-            String resultado = controlador.registrarEstudiante(codigo, nombre, carrera, ciclo);
+            String cicloInput = JOptionPane.showInputDialog("Ingrese Ciclo (1-12):");
+            if (cicloInput == null || cicloInput.trim().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Error: El campo Ciclo está vacío.");
+                return;
+            }
+            int ciclo = Integer.parseInt(cicloInput);
+            String resultado = controlador.registrarEstudiante(nombre, carrera, ciclo);
             JOptionPane.showMessageDialog(null, resultado);
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Error: El ciclo debe ser un número.");
+            JOptionPane.showMessageDialog(null, "Error: El ciclo debe ser un número válido.");
         }
     }
 
     private void gestionarRegistrarDocente() {
-        String id = JOptionPane.showInputDialog("Ingrese ID del Docente (ej. D002):");
+        String id = JOptionPane.showInputDialog("Ingrese ID del Docente (ej. D001):");
         if (id == null || id.trim().isEmpty()) return;
         String nombre = JOptionPane.showInputDialog("Ingrese Nombre Completo del Docente:");
         if (nombre == null || nombre.trim().isEmpty()) return;
@@ -178,7 +234,7 @@ public class Vista {
     }
 
     private void gestionarRegistrarCurso() {
-        String codigo = JOptionPane.showInputDialog("Ingrese Código del Curso (ej. CS102):");
+        String codigo = JOptionPane.showInputDialog("Ingrese Código del Curso (ej. CS101):");
         if (codigo == null || codigo.trim().isEmpty()) return;
         String nombre = JOptionPane.showInputDialog("Ingrese Nombre del Curso:");
         if (nombre == null || nombre.trim().isEmpty()) return;

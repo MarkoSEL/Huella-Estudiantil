@@ -17,11 +17,25 @@ public class ListaSeccion {
         }
     }
 
-    // Búsqueda Lineal
+    // Búsqueda Lineal por ID
     public NodoSeccion buscarPorId(String id) {
         NodoSeccion p = inicio;
         while (p != null) {
             if (p.getId().equalsIgnoreCase(id)) {
+                return p;
+            }
+            p = p.getSgte();
+        }
+        return null;
+    }
+    
+    // Búsqueda Lineal por curso, docente y periodo
+    public NodoSeccion buscarPorDatos(String codigoCurso, String idDocente, String periodo) {
+        NodoSeccion p = inicio;
+        while (p != null) {
+            if (p.getCurso().getCodigo().equalsIgnoreCase(codigoCurso) &&
+                p.getDocente().getId().equalsIgnoreCase(idDocente) &&
+                p.getPeriodo().equalsIgnoreCase(periodo)) {
                 return p;
             }
             p = p.getSgte();
