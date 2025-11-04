@@ -51,12 +51,16 @@ public class NodoSeccion {
     
     // Métodos para gestionar puntos por evaluación
     public void asignarPuntos(String codigoEstudiante, String evaluacion, int puntos) {
-        String clave = codigoEstudiante + "-" + evaluacion.toUpperCase();
+        // --- CORRECCIÓN AQUÍ ---
+        // Estandarizamos ambos a mayúsculas
+        String clave = codigoEstudiante.toUpperCase() + "-" + evaluacion.toUpperCase();
         this.puntosPorEvaluacion.put(clave, puntos);
     }
     
     public Integer obtenerPuntos(String codigoEstudiante, String evaluacion) {
-        String clave = codigoEstudiante + "-" + evaluacion.toUpperCase();
+        // --- CORRECCIÓN AQUÍ ---
+        // Estandarizamos ambos a mayúsculas
+        String clave = codigoEstudiante.toUpperCase() + "-" + evaluacion.toUpperCase();
         return this.puntosPorEvaluacion.get(clave);
     }
     

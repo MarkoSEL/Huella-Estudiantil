@@ -255,7 +255,7 @@ public class Controlador {
 
         if (participantes.isEmpty()) {
             // Marcar como procesada aunque no haya participaciones
-            seccion.getEvaluacionesProcesadas().add(idEvaluacion.toUpperCase());
+            // seccion.getEvaluacionesProcesadas().add(idEvaluacion.toUpperCase()); // <-- LÍNEA ELIMINADA
             return "No hay estudiantes con participaciones registradas para procesar.";
         }
         
