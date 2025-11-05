@@ -19,7 +19,7 @@ public class Controlador {
         this.db = BaseDeDatos.getInstancia();
     }
 
-    // --- ALGORITMO DE ORDENAMIENTO (TAREA 1.3) ---
+    // --- ALGORITMO DE ORDENAMIENTO  ---
     private void ordenamientoBurbuja(ArrayList<NodoEstudiante> lista) {
         int n = lista.size();
         for (int i = 0; i < n - 1; i++) {
@@ -33,16 +33,13 @@ public class Controlador {
         }
     }
     
-    // --- REQUERIMIENTOS ANTERIORES (YA FUNCIONAN CON LA REFACTORIZACIÓN) ---
-    // (generarSesiones, matricularEstudiante, registrarParticipacion, procesarParticipaciones)
-    // Nota: El código interno de estos métodos se mantiene casi idéntico, 
-    // pero ahora operan sobre "NodoEstudiante", "NodoCurso", etc.
 
-    // Lista fija de feriados (ejemplo)
+
+    // Lista fija de feriados
     private HashSet<LocalDate> obtenerFeriados() {
         HashSet<LocalDate> feriados = new HashSet<>();
-        // Feriados de ejemplo - ajustar según necesidad
-        feriados.add(LocalDate.of(2025, 3, 25));   // Año Nuevo
+        // Feriados de ejemplo 
+        feriados.add(LocalDate.of(2025, 3, 25));   // ejemplo para poder validar
         feriados.add(LocalDate.of(2025, 5, 1));   // Día del Trabajo
         feriados.add(LocalDate.of(2025, 7, 28));  // Independencia
         feriados.add(LocalDate.of(2025, 7, 29));  // Independencia
@@ -242,7 +239,7 @@ public class Controlador {
         
         // Validar que la evaluación no haya sido procesada
         if (seccion.getEvaluacionesProcesadas().contains(idEvaluacion.toUpperCase())) {
-            return "Error: La evaluación ya ha sido procesada (revisando el HashSet).";
+            return "Error: La evaluación ya ha sido procesada.";
         }
 
         // Búsqueda lineal: Filtrar estudiantes con participaciones > 0

@@ -14,7 +14,7 @@ public class Vista {
         this.controlador = new Controlador();
     }
     
-    // --- MÉTODO FALTANTE RESTAURADO ---
+
     private DayOfWeek traducirDia(String diaEnEspanol) {
         switch (diaEnEspanol.trim().toUpperCase()) {
             case "LUNES": return DayOfWeek.MONDAY;
@@ -31,7 +31,7 @@ public class Vista {
     }
 
     public void mostrarMenu() {
-        // --- MENÚ REORGANIZADO SEGÚN ESTRUCTURA SOLICITADA ---
+        // --- MENÚ ---
         String menu = "SISTEMA DE PARTICIPACIONES 'HUELLA ESTUDIANTIL'\n\n"
                 + "--- MÓDULO DE CONFIGURACIÓN ---\n"
                 + "1. Registrar Curso\n"
@@ -83,7 +83,7 @@ public class Vista {
         } while (opcion != 0);
     }
     
-    private void gestionarMatricula() { // Antes 1, ahora 7
+    private void gestionarMatricula() {
         String codigoEst = JOptionPane.showInputDialog("Ingrese el código del estudiante (ej. U2024001):");
         if (codigoEst == null || codigoEst.trim().isEmpty()) return;
         String idSec = JOptionPane.showInputDialog("Ingrese el ID de la sección (ej. SI-123):");
@@ -172,7 +172,7 @@ public class Vista {
         JOptionPane.showMessageDialog(null, resultado);
     }
     
-    private void gestionarProcesarParticipaciones() { // Antes 4, ahora 9
+    private void gestionarProcesarParticipaciones() {
         String idSec = JOptionPane.showInputDialog("Ingrese el ID de la sección (ej. SI-123):");
         if (idSec == null || idSec.trim().isEmpty()) return;
         
@@ -181,7 +181,6 @@ public class Vista {
         
         String resultado = controlador.procesarParticipaciones(idSec, idEval);
         
-        // --- CÓDIGO FALTANTE PARA MOSTRAR EN JTEXTAREA ---
         javax.swing.JTextArea textArea = new javax.swing.JTextArea(resultado);
         textArea.setEditable(false);
         javax.swing.JScrollPane scrollPane = new javax.swing.JScrollPane(textArea);
@@ -191,7 +190,7 @@ public class Vista {
         JOptionPane.showMessageDialog(null, scrollPane, "Resultado del Procesamiento", JOptionPane.INFORMATION_MESSAGE);
     }
     
-    // --- NUEVOS MÉTODOS DE GESTIÓN ---
+    // --- MÉTODOS DE GESTIÓN ---
 
     private void gestionarRegistrarEstudiante() {
         String nombre = JOptionPane.showInputDialog("Ingrese Nombre Completo:");

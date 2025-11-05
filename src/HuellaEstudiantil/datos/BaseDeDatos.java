@@ -1,6 +1,6 @@
 package HuellaEstudiantil.datos;
 
-// --- IMPORTS AÑADIDOS ---
+
 import HuellaEstudiantil.modelo.NodoCurso;
 import HuellaEstudiantil.modelo.NodoDocente;
 import HuellaEstudiantil.modelo.NodoEstudiante;

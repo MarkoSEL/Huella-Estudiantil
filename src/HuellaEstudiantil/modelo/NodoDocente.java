@@ -1,6 +1,6 @@
 package HuellaEstudiantil.modelo;
 
-// Nueva clase para el requerimiento "Registrar Docente"
+// Clase para el requerimiento "Registrar Docente"
 public class NodoDocente {
     private String id;
     private String nombre;

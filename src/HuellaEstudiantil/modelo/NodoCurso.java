@@ -2,7 +2,7 @@ package HuellaEstudiantil.modelo;
 
 import java.util.ArrayList;
 
-// Nueva clase para "Registrar Curso", aplicando el feedback
+//Clase para "Registrar Curso"
 public class NodoCurso {
     private String codigo;
     private String nombre;

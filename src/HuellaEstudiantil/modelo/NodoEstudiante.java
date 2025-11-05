@@ -1,6 +1,6 @@
 package HuellaEstudiantil.modelo;
 
-// Se ha renombrado a "NodoEstudiante" y se añaden los campos del feedback
+
 public class NodoEstudiante {
     
     public static final int LIMITE_PARTICIPACIONES = 4;
